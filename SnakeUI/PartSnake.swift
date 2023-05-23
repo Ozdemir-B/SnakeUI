@@ -128,7 +128,23 @@ struct AllSnake{
     }
     
     func didEatItself() -> Bool { //
-        return false
+        if parts.count > 3{
+            for i in 1..<parts.count{
+                let th = parts[i].position.height
+                let tw = parts[i].position.width
+                
+                let hh = parts[0].position.height
+                let hw = parts[0].position.width
+                
+                if abs(th-hh) < 10 && abs(tw-hw) < 10 {
+                    return true
+                }
+            }
+            return false
+        } else {
+            return false
+        }
+        
     }
 
     func setApplePosition() -> CGSize{

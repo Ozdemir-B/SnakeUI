@@ -25,6 +25,8 @@ struct ContentView: View {
     
     @State var openPause:Bool = false
     
+    @State var started:Bool = false
+    
     func randomApplePosition() -> CGSize {
         
         let random_width:CGFloat = Array(stride(from: -UIScreen.main.bounds.size.width*0.4, to: UIScreen.main.bounds.size.width*0.4 , by: 1)).shuffled().first!
@@ -44,7 +46,18 @@ struct ContentView: View {
             
             VStack{
                 HStack{
-                    Text("Score : \(snake.parts.count)").foregroundColor(.black).font(.system(size:25,weight:.medium,design:.rounded))
+                    Text("Score : \(snake.parts.count-1)").foregroundColor(.black).font(.system(size:25,weight:.medium,design:.rounded))
+                    Spacer()
+                    Spacer()
+                    Button(action: {
+                        started.toggle()
+                    }, label: {
+                        if started{
+                            Image(systemName: "pause").foregroundColor(.black).font(.system(size:25))
+                        } else {
+                            Image(systemName: "play.fill").foregroundColor(.black).font(.system(size:25))
+                        }
+                    })
                     Spacer()
                     Button(action: {openPause.toggle()}, label: {Image(systemName: "line.3.horizontal").foregroundColor(.black).font(.system(size:30,weight:.medium))})
                         
@@ -111,23 +124,25 @@ struct ContentView: View {
         .onReceive(timer, perform: {
             time in
             //print(self.direction)
-            
-            snake.move(newDirection: self.direction)
-            
-            if snake.didEatApple(applePosition: self.applePosition){
-                self.applePosition = self.randomApplePosition()
-                snake.addToTail()
+            if started{
+                snake.move(newDirection: self.direction)
+                
+                if snake.didEatApple(applePosition: self.applePosition){
+                    self.applePosition = self.randomApplePosition()
+                    snake.addToTail()
+                }
+                if snake.didEatItself(){
+                    started = false
+                    snake.parts = [snake.parts.first!]
+                    snake.parts[0].position = CGSize.zero
+                }
             }
             
             
             
-        })
-        .onReceive(timerAddSnake, perform: {
-            time in
             
-            //print("tail added")
-            //print(snake.parts.count)
         })
+        
         
         
     }
