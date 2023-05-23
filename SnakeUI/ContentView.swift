@@ -23,11 +23,13 @@ struct ContentView: View {
     
     @State var applePosition = CGSize.zero
     
+    @State var openPause:Bool = false
+    
     func randomApplePosition() -> CGSize {
         
-        let random_width:CGFloat = Array(stride(from: 100 as? CGFloat ?? CGFloat.zero, to: UIScreen.main.bounds.size.width/2 , by: 1)).shuffled().first!
+        let random_width:CGFloat = Array(stride(from: -UIScreen.main.bounds.size.width*0.4, to: UIScreen.main.bounds.size.width*0.4 , by: 1)).shuffled().first!
         
-        let random_height:CGFloat = Array(stride(from: 100 as? CGFloat ?? CGFloat.zero, to: UIScreen.main.bounds.size.height/2, by: 1)).shuffled().first!
+        let random_height:CGFloat = Array(stride(from: -UIScreen.main.bounds.size.height*0.3, to: UIScreen.main.bounds.size.height*0.4, by: 1)).shuffled().first!
         let return_val = CGSize(width: random_width, height: random_height)
         print("apple_position : \(return_val)")
         print("device : \(UIScreen.main.bounds.size)")
@@ -38,14 +40,32 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            Color.gray.edgesIgnoringSafeArea(.all)
+            Image("grass_bg").resizable(resizingMode:.tile).edgesIgnoringSafeArea(.all)
+            
+            VStack{
+                HStack{
+                    Text("Score : \(snake.parts.count)").foregroundColor(.black).font(.system(size:25,weight:.medium,design:.rounded))
+                    Spacer()
+                    Button(action: {openPause.toggle()}, label: {Image(systemName: "line.3.horizontal").foregroundColor(.black).font(.system(size:30,weight:.medium))})
+                        
+                }.padding(.top,60).padding().background(.ultraThinMaterial,in:RoundedRectangle(cornerRadius: 0)).edgesIgnoringSafeArea(.all)
+                Spacer()
+            }
+            .sheet(isPresented: $openPause, content: {
+                List{
+                    
+                }
+            })
+            
             ZStack{
                 ZStack{
                     
                     
                     snake.renderSnake
                     
-                    RoundedRectangle(cornerRadius: 0).frame(width:50,height:50).offset(self.applePosition).foregroundColor(.blue)
+                    Image(systemName: "apple.logo").resizable().scaledToFit().foregroundColor(.red).frame(width:50,height:50).offset(self.applePosition)
+                    
+                    //RoundedRectangle(cornerRadius: 0).frame(width:50,height:50).offset(self.applePosition).foregroundColor(.blue)
                 }
                 
                 

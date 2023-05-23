@@ -16,7 +16,7 @@ struct PartSnake{
     var direction:String
     
     var renderPart:some View{
-        return Circle().frame(width:20,height:20)
+        return Circle().frame(width:22,height:22)
     }
 }
 
@@ -29,9 +29,9 @@ struct AllSnake{
         ForEach(parts, id:\.index){
                 part in
                 if part.index == 0{
-                    part.renderPart.offset(part.position).foregroundColor(.red)
+                    part.renderPart.offset(part.position).foregroundColor(.brown)
                 } else {
-                    part.renderPart.offset(part.position).foregroundColor(.black)
+                    part.renderPart.offset(part.position).foregroundColor(.brown)
                 }
                 
                 
@@ -115,7 +115,7 @@ struct AllSnake{
         if let head = self.parts.first{
             let height_diff = abs(head.position.height - applePosition.height)
             let width_diff = abs(head.position.width - applePosition.width)
-            if height_diff < 20 && width_diff < 20 {
+            if height_diff < 30 && width_diff < 30 {
                 return true
             } else {
                 return false
